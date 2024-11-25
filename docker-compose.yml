@@ -1,0 +1,25 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    volumes:
+      - ./src:/var/www/html
+      - ./public:/var/www/html/public
+    depends_on:
+      - db
+
+  db:
+    image: mariadb:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root-pass
+      MYSQL_DATABASE: access-mac-db
+      MYSQL_USER: gato-salvaje
+      MYSQL_PASSWORD: gato-salvaje-123
+    volumes:
+      - access_mac_db:/var/lib/mysql
+
+volumes:
+  access_mac_db:

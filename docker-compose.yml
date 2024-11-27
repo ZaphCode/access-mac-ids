@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   web:
     build:
@@ -6,20 +8,44 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ./src:/var/www/html
-      - ./public:/var/www/html/public
+      - ./:/var/www/html
+    networks:
+      - dev-network
     depends_on:
       - db
 
   db:
-    image: mariadb:latest
+    image: mysql:latest
+    container_name: mysql-db
     environment:
       MYSQL_ROOT_PASSWORD: root-pass
       MYSQL_DATABASE: access-mac-db
       MYSQL_USER: gato-salvaje
       MYSQL_PASSWORD: gato-salvaje-123
     volumes:
-      - access_mac_db:/var/lib/mysql
+      - db_data:/var/lib/mysql
+    networks:
+      - dev-network
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: db
+      PMA_USER: gato-salvaje
+      PMA_PASSWORD: gato-salvaje-123
+    ports:
+      - "8081:80"
+    depends_on:
+      - db
+    networks:
+      - dev-network
 
 volumes:
-  access_mac_db:
+  db_data:
+
+networks:
+  dev-network:
+
+
+ 

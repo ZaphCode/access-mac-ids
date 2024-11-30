@@ -1,8 +1,11 @@
 RewriteEngine On
 
+# Bloquear acceso directo a src
 RewriteRule ^src(/|$) - [F,L]
 
-RewriteCond %{REQUEST_URI} !^/public/
-RewriteRule ^(.*)$ /public/$1 [L]
+# Redirigir todas las solicitudes al enrutador de la carpeta public
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /public/index.php [L]
 
 Options -Indexes

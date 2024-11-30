@@ -1,3 +1,3 @@
 function handleClick() {
-  alert("Hello world, from Javascript 2!");
+  alert("Hello world, from Javascript!");
 }

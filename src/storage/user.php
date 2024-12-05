@@ -1,5 +1,4 @@
 <?php
-
 class UserStorage
 {
     private $pdo;
@@ -16,7 +15,7 @@ class UserStorage
         $stmt->execute([
             ':username' => $username,
             ':email' => $email,
-            ':password' => password_hash($password, PASSWORD_BCRYPT),
+            ':password' => $password,
             ":role" => "user"
         ]);
         $id = $this->pdo->lastInsertId();
@@ -29,6 +28,14 @@ class UserStorage
         $sql = "SELECT id, username, email FROM users WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':id' => $id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function getUserByEmail($email)
+    {
+        $sql = "SELECT id, username, email, password FROM users WHERE email = :email";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':email' => $email]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 

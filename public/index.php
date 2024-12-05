@@ -5,14 +5,26 @@ $request = $_SERVER['REQUEST_URI'];
 $request = strtok(str_replace(URL, '', $request), '?');
 
 switch ($request) {
-    case '/login':
-        require_once __DIR__ . '/../src/views/login.php';
+    case '/account':
+        require_once __DIR__ . '/../src/views/account.php';
+        break;
+    case '/cart':
+        require_once __DIR__ . '/../src/views/cart.php';
+        break;
+    case '/signin':
+        require_once __DIR__ . '/../src/controllers/signin-controller.php';
+        break;
+    case '/signup':
+        require_once __DIR__ . '/../src/controllers/signup-controller.php';
+        break;
+    case '/logout':
+        require_once __DIR__ . '/../src/controllers/logout-controller.php';
         break;
     case '/':
         require_once __DIR__ . '/../src/views/index.php';
         break;
     default:
         http_response_code(404);
-        echo "404 - Ruta no encontrada";
+        require_once __DIR__ . '/../src/views/not-found.php';
         break;
 }

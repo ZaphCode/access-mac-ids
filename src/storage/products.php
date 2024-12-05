@@ -1,6 +1,4 @@
-
 <?php
-
 class ProductStorage
 {
     private $pdo;
@@ -70,4 +68,3 @@ class ProductStorage
         return $stmt->execute([':id' => $id]);
     }
 }
-?>

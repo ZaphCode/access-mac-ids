@@ -23,8 +23,6 @@ function setInteractivity() {
 
   cartButtons.forEach((button) => {
     const product = JSON.parse(button.dataset.product);
-    console.log(button);
-
     updateCartIcon(button, product.id);
 
     button.addEventListener("click", () => {

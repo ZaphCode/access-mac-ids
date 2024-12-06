@@ -23,9 +23,17 @@ class UserStorage
         return $id;
     }
 
+    // get all
+    public function getAll()
+    {
+        $sql = "SELECT id, username, email, role FROM users";
+        $stmt = $this->pdo->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function getUserById($id)
     {
-        $sql = "SELECT id, username, email FROM users WHERE id = :id";
+        $sql = "SELECT id, username, email, password, role FROM users WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -33,7 +41,7 @@ class UserStorage
 
     public function getUserByEmail($email)
     {
-        $sql = "SELECT id, username, email, password FROM users WHERE email = :email";
+        $sql = "SELECT id, username, email, role, password FROM users WHERE email = :email";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':email' => $email]);
         return $stmt->fetch(PDO::FETCH_ASSOC);

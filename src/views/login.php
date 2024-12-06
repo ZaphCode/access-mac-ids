@@ -6,10 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="/public/scripts/login.js" defer></script>
-    <title>Document</title>
+    <link rel="stylesheet" href="/public/assets/index.css">
+    <title>Login</title>
 </head>
 
-<body class="bg-gray-100">
+<body>
     <nav class="flex justify-center py-1.5 items-center px-4 bg-black w-full">
         <div class="">
             <a href="/public/">
@@ -68,6 +69,7 @@
             </div>
         </div>
     </main>
+    <?php include __DIR__ . "/layout/footer.php"; ?>
 </body>
 
 </html>

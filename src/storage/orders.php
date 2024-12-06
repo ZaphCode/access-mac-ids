@@ -55,7 +55,20 @@ class OrderStorage
         }, $orders);
     }
 
-    // Eliminar una orden por su ID
+    public function getByID(int $id)
+    {
+        $sql = "SELECT * FROM orders WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':id' => $id]);
+        $order = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($order) {
+            $order['products'] = json_decode($order['products'], true);
+        }
+
+        return $order;
+    }
+
     public function delete(int $id)
     {
         $sql = "DELETE FROM orders WHERE id = :id";

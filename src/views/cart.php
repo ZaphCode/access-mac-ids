@@ -21,61 +21,79 @@ include __DIR__ . "/../utils/imports.php";
             </svg>
             Cart
         </h2>
-        <div id="cart-container">
+        <div id="cart-container" class="pt-3 max-h-96 px-10 overflow-y-auto">
 
         </div>
+        <div class="w-1/2 hidden" id="checkout-container">
+            <h3 class="text-lg text-gray-600 text-center border-t-2 pt-4 border-gray-300  font-semibold mt-2">Total: $<span id="total-price">0.00</span></h3>
+            <div class="flex justify-center">
+                <a href="/checkout" class="bg-black mx-auto text-yellow-200 py-2 px-4 rounded mt-5">
+                    Proceed to Checkout
+                </a>
+            </div>
+        </div>
     </main>
-
+    <?php include __DIR__ . "/layout/footer.php"; ?>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
+            const html = String.raw;
 
             function renderCart() {
                 const cartContainer = document.getElementById("cart-container");
                 const cartItems = GlobalState.get(GlobalState.CART_KEY);
+                const checkoutContainer = document.getElementById("checkout-container");
+                const totalPriceElement = document.getElementById("total-price");
 
-                // Limpiar el contenido actual del contenedor
                 cartContainer.innerHTML = "";
 
                 if (cartItems.length === 0) {
+                    checkoutContainer.classList.add("hidden");
+                    totalPriceElement.textContent = "0.00";
                     cartContainer.innerHTML = `
-        <p class="text-gray-600 text-center mt-5">Your cart is empty. Start adding some products!</p>
-      `;
+                        <p class="text-gray-600 mb-8 text-center mt-5">
+                            Your cart is empty. Start adding some products!
+                        </p>`;
                     return;
                 }
 
-                // Crear estructura para los productos del carrito
                 cartItems.forEach(({
                     product,
                     quantity
                 }) => {
-                    const productHTML = `
-        <div class="flex gap-4 items-center border-b py-4 w-1/2">
-          <img src="${product.image_src}" alt="${product.name}" class="w-20 h-20 object-cover rounded">
-          <div class="flex flex-col flex-1">
-            <h3 class="text-lg font-semibold text-gray-700">${product.name}</h3>
-            <p class="text-sm text-gray-500">${product.description}</p>
-          </div>
-          <div class="flex flex-col items-center">
-            <span class="text-gray-600">Quantity:</span>
-            <input type="number" value="${quantity}" min="1" class="quantity-input w-16 text-center border rounded">
-          </div>
-          <div class="text-lg font-semibold text-gray-700">$${(product.price * quantity).toFixed(2)}</div>
-          <button class="remove-button text-red-500 hover:text-red-700" data-id="${product.id}">Remove</button>
-        </div>
-      `;
+                    const productHTML = html`
+                    <div class="flex gap-4 items-center bg-white px-5 py-2 mb-3 rounded-md py-4 w-full">
+                        <img src="${product.image_src}" alt="${product.name}" class="max-h-16 object-object-scale-down rounded">
+                        <div class="flex flex-col flex-1 max-w-48 min-w-36  md:min-w-44">
+                            <h3 class="text-lg font-semibold text-gray-700 truncate">${product.name}</h3>
+                            <div class="text-lg text-gray-500">$${(product.price * quantity).toFixed(2)}</div>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <span class="text-gray-700">Quantity:</span>
+                            <input type="number" value="${quantity}" data-id="${product.id}" min="1" class="quantity-input w-12 outline-none text-center border rounded">
+                        </div>
+                        <button class="remove-button text-gray-400 hover:text-red-500" data-id="${product.id}">
+                            <svg class="h-7 w-7" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round">  <line x1="18" y1="6" x2="6" y2="18" />  <line x1="6" y1="6" x2="18" y2="18" /></svg>
+                        </button>
+                    </div>
+                    `;
                     cartContainer.innerHTML += productHTML;
                 });
 
-                // Agregar interactividad a los botones de eliminar y entradas de cantidad
+
+                const totalPrice = cartItems.reduce((acc, {
+                    product,
+                    quantity
+                }) => acc + product.price * quantity, 0);
+
+                totalPriceElement.textContent = totalPrice.toFixed(2);
+                checkoutContainer.classList.remove("hidden");
                 setupCartInteractions();
             }
 
-            // Configurar interactividad para eliminar productos y actualizar cantidades
             function setupCartInteractions() {
                 const removeButtons = document.querySelectorAll(".remove-button");
                 const quantityInputs = document.querySelectorAll(".quantity-input");
 
-                // Configurar los botones de eliminar
                 removeButtons.forEach((button) => {
                     const productId = button.dataset.id;
                     button.addEventListener("click", () => {
@@ -85,14 +103,13 @@ include __DIR__ . "/../utils/imports.php";
                     });
                 });
 
-                // Configurar los inputs de cantidad
                 quantityInputs.forEach((input) => {
                     input.addEventListener("change", (e) => {
-                        const newQuantity = parseInt(e.target.value, 10);
-                        const productId = input.closest(".remove-button").dataset.id;
+                        const newQuantity = parseInt(e.target.value);
+                        const productId = input.dataset.id;
 
                         if (newQuantity > 0) {
-                            GlobalState.updateCartQuantity(productId, newQuantity);
+                            GlobalState.updateCartQuantity(parseInt(productId), newQuantity);
                             renderCart();
                         } else {
                             e.target.value = 1;
@@ -101,7 +118,6 @@ include __DIR__ . "/../utils/imports.php";
                 });
             }
 
-            // Inicializar la vista del carrito
             renderCart();
         });
     </script>

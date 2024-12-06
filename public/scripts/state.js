@@ -80,6 +80,11 @@ class GlobalState {
     return cart.some((item) => item.product.id === productId);
   }
 
+  //vaciar carrito
+  static emptyCart() {
+    this.set(this.CART_KEY, []);
+  }
+
   // Obtener la cantidad total de artículos en el carrito
   static getCartSize() {
     const cart = this.get(this.CART_KEY);

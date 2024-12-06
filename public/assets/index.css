@@ -10,4 +10,12 @@
 body {
   background: #f3f4f6;
   font-family: "Inter", sans-serif;
+
+  min-height: 100vh; /* Asegura que el cuerpo ocupe toda la altura de la ventana */
+  display: flex;
+  flex-direction: column;
+}
+
+footer {
+  margin-top: auto; /* Empuja el footer hacia el fondo si no hay suficiente contenido */
 }

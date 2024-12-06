@@ -1,6 +1,13 @@
 const favoriteContainer = document.getElementById("favorite-container");
 const html = String.raw;
 
+const logoutBtn = document.getElementById("logout-btn");
+
+logoutBtn.addEventListener("click", () => {
+  GlobalState.emptyCart();
+  window.location.href = "/logout";
+});
+
 function renderFavorites() {
   const products = GlobalState.get(GlobalState.FAVORITES_KEY) || [];
 

@@ -15,9 +15,9 @@ $products = $productStorage->getAllProducts();
     <title>Home</title>
 </head>
 
-<body class="bg-gray-100">
+<body>
     <?php include __DIR__ . "/layout/navbar.php"; ?>
-    <main class="w-4/5 md:w-4/6 xl:w-3/5 px-6 mx-auto">
+    <main class="w-4/5 md:w-4/6 xl:w-3/5 lg:mb-10 px-6 mx-auto">
         <div class="mt-4 h-64 xl:h-80 flex gap-x-3">
             <div class="w-2/3">
                 <img class="w-full h-full object-cover" src="/public/assets/img-1.jpg" alt="macbook">
@@ -87,7 +87,7 @@ $products = $productStorage->getAllProducts();
                             <p class="text-sm font-bold"><?= $product["name"] ?></p>
                             <p class="text-sm text-gray-500">$<?= $product["price"] ?></p>
                         </div>
-                        <button class="w-full h-1/6 bg-black text-yellow-200">Shop now</button>
+                        <div class="w-full h-1/6 flex justify-center items-center bg-black text-yellow-200"> <a href="/product?id=<?= $product["id"] ?>">Shop now</a></div>
                     </div>
                 <?php endforeach; ?>
 
@@ -96,9 +96,7 @@ $products = $productStorage->getAllProducts();
         </div>
 
     </main>
-    <footer class="w-full mt-20 text-center bg-white">
-        hola
-    </footer>
+    <?php include __DIR__ . "/layout/footer.php"; ?>
     <script>
         const container = document.getElementById('product-container');
         const scrollLeft = document.getElementById('scroll-left');
